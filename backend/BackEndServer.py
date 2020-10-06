@@ -1,4 +1,4 @@
-from flask import Flask, url_for, render_template , session, request, redirect
+from flask import Flask, url_for, render_template, session, request, redirect
 from markupsafe import escape
 
 app = Flask(__name__)

@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 from flask import Flask, session, request
-=======
-from flask import Flask, url_for, render_template, session, request, redirect
->>>>>>> 83facff6fcbe384cf715e03340387bcafc6e8d6c
 from markupsafe import escape
 import os
 

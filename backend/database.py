@@ -25,7 +25,6 @@ class Database():
         """
         self.sql_lock.acquire()
         query: str = "SELECT * FROM users WHERE name = \"{0}\" AND password = \"{1}\"".format(user_name, user_password)
-        
         # Adding limit at the end, and aplying the -- removal
         query = query.split("--")[0] + " LIMIT 1"
 

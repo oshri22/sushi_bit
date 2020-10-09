@@ -1,0 +1,54 @@
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.4;
+}
+
+a{
+  color: #333;
+  text-decoration: none;
+}
+
+.Container {
+  padding: 1rem;
+}
+
+.btn {
+  display: inline-block;
+  border: none;
+  background: #555;
+  color: #fff;
+  padding: 7px 20px;
+  cursor: pointer;
+}
+
+.btn:hover{
+  background: #666666;
+}
+
+.input:hover{
+  border-color: #3206FA;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  padding: 5px 500px;
+  order: 2;
+  justify-content: space-between;
+}
+
+.status {
+  display: flex;
+  flex-direction: column;
+}
+
+.status p {
+  align-self: center;
+  font-family: Arial, Helvetica, sans-serif;
+}

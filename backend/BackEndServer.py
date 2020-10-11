@@ -7,15 +7,11 @@ import json
 
 app = Flask(__name__)
 CORS(app)
-app.secret_key = b''
+app.secret_key = b'37ytOSvRF6'
 
 #the sql client 
 dbmanger = database.Database("data.db")
 
-""" @app.after_request
-def apply_caching(response):
-    response.headers["Access-Control-Allow-Origin"] = "*" 
-    return response """
 
 @app.route('/api')
 def index():
@@ -45,19 +41,27 @@ def login():
         password: str = request.json["password"]
         #add a check if the user is already conected
 
-        res:dict = json.loads(dbmanger.user_login(username, password))
-        if res["name"] == username:
+        res:dict = dbmanger.user_login(username, password)
+        if res["name"] != "error":
             session["username"] = username
-            session["password"] = username
+            session["password"] = password
         return json.dumps(res)
         
-    return "You are not suppose to use get here"
 
 
 
-@app.route('/api/register')
+@app.route('/api/register',methods = ["GET","POST","OPTIONS"])
 def register():
-    pass
+    if request.method == "POST":
+        username: str = request.json["username"]
+        password: str = request.json["password"]
+
+        res:dict = dbmanger.register(request.json)
+        if res["name"] != "error":
+            session["username"] = username
+            session["password"] = password
+        return json.dumps(res)
+    
 
 
 @app.route('/form/form')

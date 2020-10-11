@@ -12,6 +12,10 @@ export default function header() {
             <Link style = {{color: "#fff"}} to = "/login">
                 Login
             </Link>
+            {" | "}
+            <Link style = {{color: "#fff"}} to = "/Register">
+                Register
+            </Link>
 
 
         </header>

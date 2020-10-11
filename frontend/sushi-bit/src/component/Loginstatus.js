@@ -5,7 +5,7 @@ export default function Loginstatus(props) {
 
   const statusStyle = () => {
     console.log(props.status);
-    return { color: props.status === "You are logged in" ? "#008" : "#ff0000" };
+    return { color: props.status.includes("logged in")  ? "#008" : "#ff0000" };
   };
 
   return (

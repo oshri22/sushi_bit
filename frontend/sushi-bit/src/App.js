@@ -1,4 +1,4 @@
-import React, { useState, Component } from "react";
+import React, { useState} from "react";
 import "./App.css";
 import { v4 as uuidv4 } from "uuid";
 import { BrowserRouter as Router, Route } from "react-router-dom";
@@ -11,23 +11,26 @@ import Loginstatus from "./component/Loginstatus";
 import Register from "./component/Register";
 
 export default function App() {
-  const [username, setUsername] = useState("");
+  const [userData, setUserdata] = useState({
+    username:"",
+    password:"",
+    money:undefined
+  });
   const [loginStatus, setLoginStatus] = useState("");
-  const [money, setmoney] = useState(0);
 
   return (
     <Router>
       <div className="App">
         <div className="container">
-          <Header />
+          <Header userData = {userData}/>
           <Route
             exact
             path="/login"
             render={(props) => (
               <React.Fragment>
                 <Login
-                  username={username}
-                  setUsername={setUsername}
+                  userData={userData}
+                  setUserdata={setUserdata}
                   loginStatus={loginStatus}
                   setLoginStatus={setLoginStatus}
                 />
@@ -41,8 +44,8 @@ export default function App() {
             render={(props) => (
               <React.Fragment>
                 <Register
-                  username={username}
-                  setUsername={setUsername}
+                  userData={userData}
+                  setUserdata={setUserdata}
                   loginStatus={loginStatus}
                   setLoginStatus={setLoginStatus}
                 />

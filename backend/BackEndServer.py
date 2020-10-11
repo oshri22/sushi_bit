@@ -52,6 +52,22 @@ def login():
 
 @app.route('/api/register',methods = ["GET","POST","OPTIONS"])
 def register():
+    '''
+    A route function for the register page that get the login info on a http post method
+    then use the login function from the sql module to try register a new user 
+    if registration complete sucssesfuly store his data on a coockie and send the acount info 
+    for the react.js on the client side
+    if login failed then send an error response for the react.js on the client side
+
+    request: the object flask make from the http post data
+    session: flask object that semulate a coockie
+
+    username: the given username -- str
+    password: the given password -- str
+
+    res: the response data for the react.js on the client side -- dict/json
+    
+    '''
     if request.method == "POST":
         username: str = request.json["username"]
         password: str = request.json["password"]

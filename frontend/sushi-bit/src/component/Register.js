@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Axios from "axios";
 
-//a react function component used for the login page
+//a react function component used for the register page
 
 export default function Register(props) {
   /*
@@ -28,14 +28,15 @@ export default function Register(props) {
     e.preventDefault();
 
     //check if the user is already logged in
-    //console.log(props.Loginstatus);
     if (
       props.loginStatus === "You are logged in" ||
       props.loginStatus === "You already logged in"
     ) {
       props.setLoginStatus("You already logged in");
+      //form validation
     } else if (!usernameState) {
       props.setLoginStatus("Username is empty");
+      //form validation
     } else if (!passwordState) {
       props.setLoginStatus("password is empty");
     } else {
@@ -49,14 +50,19 @@ export default function Register(props) {
       const res = await Axios.post("/api/register", postData);
       const data = res.data;
 
+
       //check the status of the response and later to choose the login ststus
       if (res.status === 200) {
-        if (data.name === "error") {
+        if (!data.login) {
           props.setLoginStatus(
             "there is already a user with the given username"
           );
         } else {
-          props.setUsername(usernameState);
+          props.setUserdata({
+            username:data.name,
+            password:passwordState,
+            money:0
+          });
           props.setLoginStatus(
             "You have registered sucssesfully You are logged in"
           );

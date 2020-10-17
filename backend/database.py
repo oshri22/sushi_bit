@@ -36,23 +36,23 @@ class Database():
                 name, password, money, id = user
 
                 # Returning the information about the user, and if it could connect
-                return json.dumps({"name": name, "id": id, "money": money, "login": True})
+                return {"name": name, "id": id, "money": money, "login": True}
 
             except ValueError:
-                return json.dumps({"name": "error", "id": -1, "money": -999, "login": False})
+                return {"name": "error", "id": -1, "money": -999, "login": False}
         
         self.sql_lock.release()
-        return json.dumps({"name": "error", "id": -1, "money": -999, "login": False})
+        return {"name": "error", "id": -1, "money": -999, "login": False}
+
 
     def register(self, params: str) -> str:
-        params = json.loads(params)
         self.sql_lock.acquire()
         query: str = "INSERT INTO users VALUES(?, ?, ?, NULL)"
         check_query: str = "SELECT * FROM users WHERE name = ? LIMIT 1" 
         # Check if the user already exists
 
         #if it is return login error      
-        users = self.cursor.execute(check_query, (params["name"],))
+        users = self.cursor.execute(check_query, (params["username"],))
         has_user = False
         for user in users:
             has_user = True
@@ -68,22 +68,22 @@ class Database():
 
         if has_user:
             self.sql_lock.release()
-            return json.dumps({"name": "error", "id": -1, "money": -999, "login": False})
+            return {"name": "error", "id": -1, "money": -999, "login": False}
         
         else:
             #Create a new user and return its stats
             try:
-                self.cursor.execute(query,(params["name"], params["password"], params["money"]))
+                self.cursor.execute(query,(params["username"], params["password"], params["money"]))
                 self.connection.commit()
                 self.sql_lock.release()
-                user = self.user_login(params["name"], params["password"])
+                user = self.user_login(params["username"], params["password"])
 
                 return user
             except sqlite3.OperationalError as e:
                 print(e)
 
             self.sql_lock.release()
-            return json.dumps({"name": "error", "id": -1, "money": -999, "login": False})
+            return {"name": "error", "id": -1, "money": -999, "login": False}
 
     def transfer_money(self, user_from, user_to, amount):
         check_query: str = "SELECT * FROM users WHERE name = ? LIMIT 1" 
@@ -120,9 +120,8 @@ def main():
     print("started")
     data = Database("data.db")
     
+
     print(data.transfer_money("galol", "gal", 10)["transferd"])
-
-
 
 if __name__ == "__main__":
     main()

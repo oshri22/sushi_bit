@@ -3,7 +3,7 @@ import Axios from "axios";
 
 //a react function component used for the login page
 
-export default function Login(props) {
+export default function Register(props) {
   /*
    *usernamesate contain the current value that the user entered to the filed
    *passwordstate is the same as the usernamestate but for the password
@@ -34,30 +34,32 @@ export default function Login(props) {
       props.loginStatus === "You already logged in"
     ) {
       props.setLoginStatus("You already logged in");
-      //console.log(props.Loginstatus);
-    }else if (!usernameState){
+    } else if (!usernameState) {
       props.setLoginStatus("Username is empty");
-    }else if (!passwordState){
-      props.setLoginStatus("password is empty")
-    }else {
+    } else if (!passwordState) {
+      props.setLoginStatus("password is empty");
+    } else {
       //the data that will be send for the backends w
       const postData = {
         username: usernameState,
         password: passwordState,
+        money: 0,
       };
       //making the request using axios
-      const res = await Axios.post("/api/login", postData);
+      const res = await Axios.post("/api/register", postData);
       const data = res.data;
 
       //check the status of the response and later to choose the login ststus
       if (res.status === 200) {
         if (data.name === "error") {
           props.setLoginStatus(
-            "*could not find a user with the given name or password"
+            "there is already a user with the given username"
           );
         } else {
           props.setUsername(usernameState);
-          props.setLoginStatus("You are logged in");
+          props.setLoginStatus(
+            "You have registered sucssesfully You are logged in"
+          );
         }
       } else {
         props.setLoginStatus(
@@ -73,7 +75,7 @@ export default function Login(props) {
       // @ts-ignore
       className="formdiv"
     >
-      <h1 style={{ alignSelf: "center", order: 1 }}>Login</h1>
+      <h1 style={{ alignSelf: "center", order: 1 }}>Register</h1>
       <form
         onSubmit={formSubmit}
         // @ts-ignore
@@ -97,7 +99,7 @@ export default function Login(props) {
         />
         <input
           type="submit"
-          value="Login"
+          value="Register"
           className="btn"
           style={{ paddingTop: "5px" }}
         />

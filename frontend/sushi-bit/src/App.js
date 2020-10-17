@@ -8,10 +8,12 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import Header from "./component/Header";
 import Login from "./component/Login";
 import Loginstatus from "./component/Loginstatus";
+import Register from "./component/Register";
 
 export default function App() {
   const [username, setUsername] = useState("");
   const [loginStatus, setLoginStatus] = useState("");
+  const [money, setmoney] = useState(0);
 
   return (
     <Router>
@@ -24,6 +26,21 @@ export default function App() {
             render={(props) => (
               <React.Fragment>
                 <Login
+                  username={username}
+                  setUsername={setUsername}
+                  loginStatus={loginStatus}
+                  setLoginStatus={setLoginStatus}
+                />
+                <Loginstatus status = {loginStatus}/>
+              </React.Fragment>
+            )}
+          />
+          <Route
+            exact
+            path="/Register"
+            render={(props) => (
+              <React.Fragment>
+                <Register
                   username={username}
                   setUsername={setUsername}
                   loginStatus={loginStatus}

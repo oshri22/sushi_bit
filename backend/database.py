@@ -121,7 +121,7 @@ class Database():
         self.sql_lock.release()
         return {"transferd": False}
 
-    def give_money(self, user_to):
+    def give_money(self, user_to,amount):
         self.sql_lock.acquire()
         check_query: str = "SELECT * FROM users WHERE name = ? LIMIT 1" 
         transfer_query: str = "UPDATE users SET money = money + ? WHERE name = ?"

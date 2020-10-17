@@ -86,6 +86,7 @@ class Database():
             return {"name": "error", "id": -1, "money": -999, "login": False}
 
     def transfer_money(self, user_from, user_to, amount):
+        self.sql_lock.acquire()
         check_query: str = "SELECT * FROM users WHERE name = ? LIMIT 1" 
         transfer_query: str = "UPDATE users SET money = money + ? WHERE name = ?"
         
@@ -96,6 +97,7 @@ class Database():
             exist = True
 
         if not exist:
+            self.sql_lock.release()
             return {"transferd": False}
 
         # Get the user from
@@ -111,10 +113,41 @@ class Database():
                 self.connection.commit()
             except:
                 print("couldn't transfer money")
+                self.sql_lock.release()
                 return {"transferd": False}
+            self.sql_lock.release()
             return {"transferd": True}
         
+        self.sql_lock.release()
         return {"transferd": False}
+
+    def give_money(self, user_to):
+        self.sql_lock.acquire()
+        check_query: str = "SELECT * FROM users WHERE name = ? LIMIT 1" 
+        transfer_query: str = "UPDATE users SET money = money + ? WHERE name = ?"
+        
+        # Check if the user to give exists
+        users = self.cursor.execute(check_query, (user_to,))
+        exist = False
+        for user in users:
+            exist = True
+
+        if not exist:
+            self.sql_lock.release()
+            return {"transferd": False}
+        try:
+            self.cursor.execute(transfer_query,(amount, user_to))
+            self.connection.commit()
+            
+        except:
+            print("couldn't transfer money")
+            self.sql_lock.release()
+            return {"transferd": False}
+
+        self.sql_lock.release()
+        return {"transferd": True}
+
+
 
 def main():
     print("started")

@@ -85,14 +85,43 @@ class Database():
             self.sql_lock.release()
             return json.dumps({"name": "error", "id": -1, "money": -999, "login": False})
 
+    def transfer_money(self, user_from, user_to, amount):
+        check_query: str = "SELECT * FROM users WHERE name = ? LIMIT 1" 
+        transfer_query: str = "UPDATE users SET money = money + ? WHERE name = ?"
+        
+        # Check if the user to give exists
+        users = self.cursor.execute(check_query, (user_to,))
+        exist = False
+        for user in users:
+            exist = True
 
+        if not exist:
+            return {"transferd": False}
+
+        # Get the user from
+        users = self.cursor.execute(check_query, (user_from,))
+        for user in users:
+            name, password, money, id = user
+        
+        # Check if the user has the amount to be transfered
+        if money >= amount:
+            try:
+                self.cursor.execute(transfer_query,(amount, user_to))
+                self.cursor.execute(transfer_query,(-amount, user_from))
+                self.connection.commit()
+            except:
+                print("couldn't transfer money")
+                return {"transferd": False}
+            return {"transferd": True}
+        
+        return {"transferd": False}
 
 def main():
     print("started")
     data = Database("data.db")
     
-    print(data.register('{"name": "galol66", "password": "sesame", "money": 100}'))
-    print(data.user_login("galol", "sesame"))
+    print(data.transfer_money("galol", "gal", 10)["transferd"])
+
 
 
 if __name__ == "__main__":

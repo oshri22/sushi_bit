@@ -28,7 +28,7 @@ export default function Login(props) {
     e.preventDefault();
 
     //check if the user is already logged in
-    //console.log(props.Loginstatus);
+
     if (
       props.loginStatus === "You are logged in" ||
       props.loginStatus === "You already logged in"

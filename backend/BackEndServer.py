@@ -91,4 +91,9 @@ def menu():
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
+<<<<<<< HEAD
     app.run(host='0.0.0.0', port=port, debug= False)
+=======
+    print("test")
+    app.run(host='127.0.0.1', port=port, debug= False)
+>>>>>>> 43d724e0ad43d28d61773ac42616da739b457306

@@ -20,6 +20,14 @@ export default function header(props) {
                 <Link style = {{color: "#fff"}} to = "/Register">
                     Register
                 </Link>
+                {" | "}
+                <Link style = {{color: "#fff"}} to = "/BuyMoney">
+                    Buy Money
+                </Link>
+                {" | "}
+                <Link style = {{color: "#fff"}} to = "/TrnsferMoney">
+                    Trnasfer Money
+                </Link>
             </div>
 
 

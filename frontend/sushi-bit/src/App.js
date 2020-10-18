@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 //import { v4 as uuidv4 } from "uuid";
@@ -9,12 +9,14 @@ import Header from "./component/Header";
 import Login from "./component/Login";
 import Loginstatus from "./component/Loginstatus";
 import Register from "./component/Register";
+import BuyMoney from "./component/BuyMoney";
+import TrnsferMoney from "./component/TransferMoney";
 
 export default function App() {
   const [userData, setUserdata] = useState({
-    username:"",
-    password:"",
-    money:undefined
+    username: "",
+    password: "",
+    money: undefined,
   });
   const [loginStatus, setLoginStatus] = useState("");
 
@@ -22,7 +24,7 @@ export default function App() {
     <Router>
       <div className="App">
         <div className="container">
-          <Header userData = {userData}/>
+          <Header userData={userData} />
           <Route
             exact
             path="/login"
@@ -34,7 +36,7 @@ export default function App() {
                   loginStatus={loginStatus}
                   setLoginStatus={setLoginStatus}
                 />
-                <Loginstatus status = {loginStatus}/>
+                <Loginstatus status={loginStatus} />
               </React.Fragment>
             )}
           />
@@ -49,7 +51,31 @@ export default function App() {
                   loginStatus={loginStatus}
                   setLoginStatus={setLoginStatus}
                 />
-                <Loginstatus status = {loginStatus}/>
+                <Loginstatus status={loginStatus} />
+              </React.Fragment>
+            )}
+          />
+          <Route
+            exact
+            path="/BuyMoney"
+            render={(props) => (
+              <React.Fragment>
+                <BuyMoney
+                userData = {userData}
+                setUserdata = {setUserdata}
+                />
+              </React.Fragment>
+            )}
+          />
+          <Route
+            exact
+            path="/TrnsferMoney"
+            render={(props) => (
+              <React.Fragment>
+                <TrnsferMoney
+                userData = {userData}
+                setUserdata = {setUserdata}
+                />
               </React.Fragment>
             )}
           />

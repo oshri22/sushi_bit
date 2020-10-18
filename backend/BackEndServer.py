@@ -88,12 +88,21 @@ def form():
 def menu():
     pass
 
+@app.route('/api/BuyMoney',methods=["POST"])
+def BuyMoney():
+    return dbmanger.give_money(request.json["username"],request.json["amount"])
+
+@app.route('/api/TransferMoney/<string:userTo>/<int:amount>',methods=["GET"])
+def transfer_money(userTo,amount):
+    user_to = str(escape(userTo))
+    amount = int(escape(amount))
+    user_from = session["username"]
+    #print(f"{type(user_to)}, {type(amount)}, {type(user_from)}")
+    return dbmanger.transfer_money(user_from,userTo,amount)
+    #return {"transferd": False}
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
-<<<<<<< HEAD
     app.run(host='0.0.0.0', port=port, debug= False)
-=======
-    print("test")
-    app.run(host='127.0.0.1', port=port, debug= False)
->>>>>>> 43d724e0ad43d28d61773ac42616da739b457306
+
+

@@ -28,15 +28,16 @@ export default function Login(props) {
     e.preventDefault();
 
     //check if the user is already logged in
-    //console.log(props.Loginstatus);
+
     if (
       props.loginStatus === "You are logged in" ||
       props.loginStatus === "You already logged in"
     ) {
       props.setLoginStatus("You already logged in");
-      //console.log(props.Loginstatus);
+      //some form validation
     }else if (!usernameState){
       props.setLoginStatus("Username is empty");
+      //form validation
     }else if (!passwordState){
       props.setLoginStatus("password is empty")
     }else {
@@ -49,14 +50,19 @@ export default function Login(props) {
       const res = await Axios.post("/api/login", postData);
       const data = res.data;
 
+
       //check the status of the response and later to choose the login ststus
       if (res.status === 200) {
-        if (data.name === "error") {
+        if (!data.login) {
           props.setLoginStatus(
             "*could not find a user with the given name or password"
           );
         } else {
-          props.setUsername(usernameState);
+          props.setUserdata({
+            username:data.name,
+            password:passwordState,
+            money:data.money
+          });
           props.setLoginStatus("You are logged in");
         }
       } else {

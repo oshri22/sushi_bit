@@ -17,7 +17,6 @@ dbmanger = database.Database("data.db")
 def index():
     pass
 
-
 @app.route('/api/login', methods=["GET","POST","OPTIONS"])
 def login():
     '''
@@ -52,6 +51,22 @@ def login():
 
 @app.route('/api/register',methods = ["GET","POST","OPTIONS"])
 def register():
+    '''
+    A route function for the register page that get the login info on a http post method
+    then use the login function from the sql module to try register a new user 
+    if registration complete sucssesfuly store his data on a coockie and send the acount info 
+    for the react.js on the client side
+    if login failed then send an error response for the react.js on the client side
+
+    request: the object flask make from the http post data
+    session: flask object that semulate a coockie
+
+    username: the given username -- str
+    password: the given password -- str
+
+    res: the response data for the react.js on the client side -- dict/json
+    
+    '''
     if request.method == "POST":
         username: str = request.json["username"]
         password: str = request.json["password"]
@@ -73,8 +88,21 @@ def form():
 def menu():
     pass
 
+@app.route('/api/BuyMoney',methods=["POST"])
+def BuyMoney():
+    return dbmanger.give_money(request.json["username"],request.json["amount"])
+
+@app.route('/api/TransferMoney/<string:userTo>/<int:amount>',methods=["GET"])
+def transfer_money(userTo,amount):
+    user_to = str(escape(userTo))
+    amount = int(escape(amount))
+    user_from = session["username"]
+    #print(f"{type(user_to)}, {type(amount)}, {type(user_from)}")
+    return dbmanger.transfer_money(user_from,userTo,amount)
+    #return {"transferd": False}
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
-    print("test")
-    app.run(host='127.0.0.1', port=port, debug= False)
+    app.run(host='0.0.0.0', port=port, debug= False)
+
+

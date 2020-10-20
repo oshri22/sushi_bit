@@ -19,7 +19,9 @@ export default function App() {
     money: undefined,
   });
   const [loginStatus, setLoginStatus] = useState("");
-
+  /*
+  *check if the user alredy logged in in the past to creat presistence
+  */
   useEffect(() => {
     const loggedInUser = localStorage.getItem("sushi-bit-user");
     if (loggedInUser) {

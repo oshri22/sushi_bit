@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 //import { v4 as uuidv4 } from "uuid";
@@ -19,6 +19,16 @@ export default function App() {
     money: undefined,
   });
   const [loginStatus, setLoginStatus] = useState("");
+
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem("sushi-bit-user");
+    if (loggedInUser) {
+      console.log(loggedInUser);
+      const foundUser = JSON.parse(loggedInUser);
+      setUserdata(foundUser);
+      setLoginStatus("You are logged in");
+    }
+  }, []);
 
   return (
     <Router>
@@ -60,10 +70,7 @@ export default function App() {
             path="/BuyMoney"
             render={(props) => (
               <React.Fragment>
-                <BuyMoney
-                userData = {userData}
-                setUserdata = {setUserdata}
-                />
+                <BuyMoney userData={userData} setUserdata={setUserdata} />
               </React.Fragment>
             )}
           />
@@ -72,10 +79,7 @@ export default function App() {
             path="/TrnsferMoney"
             render={(props) => (
               <React.Fragment>
-                <TrnsferMoney
-                userData = {userData}
-                setUserdata = {setUserdata}
-                />
+                <TrnsferMoney userData={userData} setUserdata={setUserdata} />
               </React.Fragment>
             )}
           />

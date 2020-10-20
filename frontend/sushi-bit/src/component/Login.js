@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Axios from "axios";
 
 //a react function component used for the login page
@@ -12,6 +12,14 @@ export default function Login(props) {
    */
   const [usernameState, setUsername] = useState("");
   const [passwordState, setPassword] = useState("");
+
+  useEffect(() =>{
+    if (props.userData.username){
+      localStorage.setItem(
+        "sushi-bit-user",
+        JSON.stringify(props.userData));
+    }
+  });
 
   //updating the usernameState every time the user enter somthing to the username filed
   const onChangeUsername = (e) => {
@@ -35,12 +43,12 @@ export default function Login(props) {
     ) {
       props.setLoginStatus("You already logged in");
       //some form validation
-    }else if (!usernameState){
+    } else if (!usernameState) {
       props.setLoginStatus("Username is empty");
       //form validation
-    }else if (!passwordState){
-      props.setLoginStatus("password is empty")
-    }else {
+    } else if (!passwordState) {
+      props.setLoginStatus("password is empty");
+    } else {
       //the data that will be send for the backends w
       const postData = {
         username: usernameState,
@@ -50,7 +58,6 @@ export default function Login(props) {
       const res = await Axios.post("/api/login", postData);
       const data = res.data;
 
-
       //check the status of the response and later to choose the login ststus
       if (res.status === 200) {
         if (!data.login) {
@@ -58,12 +65,15 @@ export default function Login(props) {
             "*could not find a user with the given name or password"
           );
         } else {
-          props.setUserdata({
-            username:data.name,
-            password:passwordState,
-            money:data.money
+          await props.setUserdata({
+            username: data.name,
+            password: passwordState,
+            money: data.money,
           });
+
           props.setLoginStatus("You are logged in");
+          
+          console.log(props.userData);
         }
       } else {
         props.setLoginStatus(

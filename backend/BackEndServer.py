@@ -9,7 +9,7 @@ app = Flask(__name__)
 CORS(app)
 app.secret_key = b'37ytOSvRF6'
 
-#the sql client 
+# the sql client
 dbmanger = database.Database("data.db")
 
 
@@ -17,7 +17,8 @@ dbmanger = database.Database("data.db")
 def index():
     pass
 
-@app.route('/api/login', methods=["GET","POST","OPTIONS"])
+
+@app.route('/api/login', methods=["GET", "POST", "OPTIONS"])
 def login():
     '''
     A route function for the login page that get the login info on a http post method
@@ -33,23 +34,21 @@ def login():
     password: the given password -- str
 
     res: the response data for the react.js on the client side -- dict/json
-    
+
     '''
     if request.method == "POST":
         username: str = request.json["username"]
         password: str = request.json["password"]
-        #add a check if the user is already conected
+        # add a check if the user is already conected
 
-        res:dict = dbmanger.user_login(username, password)
+        res: dict = dbmanger.user_login(username, password)
         if res["name"] != "error":
             session["username"] = username
             session["password"] = password
         return json.dumps(res)
-        
 
 
-
-@app.route('/api/register',methods = ["GET","POST","OPTIONS"])
+@app.route('/api/register', methods=["GET", "POST", "OPTIONS"])
 def register():
     '''
     A route function for the register page that get the login info on a http post method
@@ -65,18 +64,17 @@ def register():
     password: the given password -- str
 
     res: the response data for the react.js on the client side -- dict/json
-    
+
     '''
     if request.method == "POST":
         username: str = request.json["username"]
         password: str = request.json["password"]
 
-        res:dict = dbmanger.register(request.json)
+        res: dict = dbmanger.register(request.json)
         if res["name"] != "error":
             session["username"] = username
             session["password"] = password
         return json.dumps(res)
-    
 
 
 @app.route('/form/form')
@@ -88,21 +86,39 @@ def form():
 def menu():
     pass
 
-@app.route('/api/BuyMoney',methods=["POST"])
-def BuyMoney():
-    return dbmanger.give_money(request.json["username"],request.json["amount"])
 
-@app.route('/api/TransferMoney/<string:userTo>/<int:amount>',methods=["GET"])
-def transfer_money(userTo,amount):
+@app.route('/api/BuyMoney', methods=["POST"])
+def BuyMoney():
+    """  A rout function for the but money page
+      get amount and the user_to as a json
+      the pass them to the sql function to handel it next 
+
+      user_to: the user to get parameter -string
+      amount: the amount to transfer - int
+
+      return a dict that describe the transfer status """
+    return dbmanger.give_money(request.json["username"], request.json["amount"])
+
+
+@app.route('/api/TransferMoney/<string:userTo>/<int:amount>', methods=["GET"])
+def transfer_money(userTo, amount):
+    '''
+     A rout function for the transfer money page
+     get the user to and amount form the get parameters so the user will be abel to preform xss on the site to force a transform
+     the pass them to the sql function to handel it next 
+
+     user_to: the user to get parameter -string
+     amount: the amount to transfer - int
+     user_from: the user to transfer the money from
+
+     return a dict that describe the transfer status
+    '''
     user_to = str(escape(userTo))
     amount = int(escape(amount))
     user_from = session["username"]
-    #print(f"{type(user_to)}, {type(amount)}, {type(user_from)}")
-    return dbmanger.transfer_money(user_from,userTo,amount)
-    #return {"transferd": False}
+    return dbmanger.transfer_money(user_from, userTo, amount)
+
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug= False)
-
-
+    app.run(host='0.0.0.0', port=port, debug=False)

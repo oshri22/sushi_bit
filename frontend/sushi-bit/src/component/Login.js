@@ -9,17 +9,23 @@ export default function Login(props) {
    *passwordstate is the same as the usernamestate but for the password
    *setUsername is the hook to change the username
    *setUsername is the hook to change the password
+   *toSave - if useEfect hook need to change the user data in the local storage
    */
   const [usernameState, setUsername] = useState("");
   const [passwordState, setPassword] = useState("");
+  const [toSave, setTosave] = useState(false);
 
   useEffect(() =>{
-    if (props.userData.username){
+    if (toSave){
       localStorage.setItem(
         "sushi-bit-user",
         JSON.stringify(props.userData));
+        props.setUserdata({
+          ...props.userData,
+        });
+        setTosave(false);
     }
-  });
+  },[toSave, props]);
 
   //updating the usernameState every time the user enter somthing to the username filed
   const onChangeUsername = (e) => {
@@ -70,10 +76,9 @@ export default function Login(props) {
             password: passwordState,
             money: data.money,
           });
-
+          setTosave(true);
           props.setLoginStatus("You are logged in");
           
-          console.log(props.userData);
         }
       } else {
         props.setLoginStatus(

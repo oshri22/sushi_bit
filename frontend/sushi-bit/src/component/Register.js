@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Axios from "axios";
 
 //a react function component used for the register page
@@ -9,9 +9,23 @@ export default function Register(props) {
    *passwordstate is the same as the usernamestate but for the password
    *setUsername is the hook to change the username
    *setUsername is the hook to change the password
+   *toSave - if useEfect hook need to change the user data in the local storage
    */
   const [usernameState, setUsername] = useState("");
   const [passwordState, setPassword] = useState("");
+  const [toSave, setTosave] = useState(false);
+
+  useEffect(() =>{
+    if (toSave){
+      localStorage.setItem(
+        "sushi-bit-user",
+        JSON.stringify(props.userData));
+        props.setUserdata({
+          ...props.userData,
+        });
+        setTosave(false);
+    }
+  },[toSave, props]);
 
   //updating the usernameState every time the user enter somthing to the username filed
   const onChangeUsername = (e) => {
@@ -61,8 +75,9 @@ export default function Register(props) {
           props.setUserdata({
             username:data.name,
             password:passwordState,
-            money:0
+            money:0,
           });
+          setTosave(true);
           props.setLoginStatus(
             "You have registered sucssesfully You are logged in"
           );

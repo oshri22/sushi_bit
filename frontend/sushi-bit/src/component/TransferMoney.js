@@ -1,6 +1,6 @@
 // @ts-ignore
 import Axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function TransferMoney(props) {
   /**
@@ -10,13 +10,25 @@ export default function TransferMoney(props) {
    * params -> userTo - a state that contain the user to send the money to
    *           amount - the amount state that contains the amount to transfer
    *           status - the transfer status
+   *           toSave - if useEfect hook need to change the user data in the local storage
    *
    */
   const [userTo, setUserto] = useState("");
   const [amount, setamount] = useState(0);
   const [status, setStatus] = useState(
-    props.userData.username ? "" : "You need to be loggedin"
+    localStorage.getItem("sushi-bit-user") ? "" : "You need to be loggedin"
   );
+  const [toSave, setTosave] = useState(false);
+
+  useEffect(() => {
+    if (toSave) {
+      localStorage.setItem("sushi-bit-user", JSON.stringify(props.userData));
+      props.setUserdata({
+        ...props.userData,
+      });
+      setTosave(false);
+    }
+  }, [toSave, props]);
 
   //a function that will change the status every time the user type somthing to the user filed
   const onChangeUser = (e) => {
@@ -46,6 +58,7 @@ export default function TransferMoney(props) {
             ...props.userData,
             money: new_amount,
           });
+          setTosave(true);
           setStatus("Money Transfered sucssesfoly");
         } else {
           setStatus("Cant trnsfer money");

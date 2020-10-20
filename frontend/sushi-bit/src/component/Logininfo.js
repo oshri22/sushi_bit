@@ -10,7 +10,7 @@ export default function logininfo(props) {
   };
 
   const text = () => {
-    if (props.userData.username){
+    if (localStorage.getItem("sushi-bit-user")){
         return <>
         <p>User-name :{props.userData.username}</p>
         <p>Password : {props.userData.password}</p>

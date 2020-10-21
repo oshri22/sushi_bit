@@ -28,19 +28,21 @@ class Database():
         query: str = "SELECT * FROM users WHERE name = \"{0}\" AND password = \"{1}\"".format(user_name, user_password)
         # Adding limit at the end, and aplying the -- removal
         query = query.split("--")[0] + " LIMIT 1"
+        try:
+            for user in self.cursor.execute(query):
+                
+                try:
+                    self.sql_lock.release()
+                    name, password, money, id = user
 
-        for user in self.cursor.execute(query):
-            
-            try:
-                self.sql_lock.release()
-                name, password, money, id = user
+                    # Returning the information about the user, and if it could connect
+                    return {"name": name, "id": id, "money": money, "login": True}
 
-                # Returning the information about the user, and if it could connect
-                return {"name": name, "id": id, "money": money, "login": True}
+                except ValueError:
+                    return {"name": "error", "id": -1, "money": -999, "login": False}
+        except sqlite3.OperationalError:
+            return {"name": "error", "id": -1, "money": -999, "login": False}
 
-            except ValueError:
-                return {"name": "error", "id": -1, "money": -999, "login": False}
-        
         self.sql_lock.release()
         return {"name": "error", "id": -1, "money": -999, "login": False}
 

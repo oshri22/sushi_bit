@@ -118,6 +118,12 @@ def transfer_money(userTo, amount):
     user_from = session["username"]
     return dbmanger.transfer_money(user_from, userTo, amount)
 
+@app.route('/api/Logout', methods=["GET"])
+def logout():
+    session.pop("username")
+    session.pop("password")
+    return {"status":True}
+
 
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))

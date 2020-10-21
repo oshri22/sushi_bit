@@ -13,7 +13,7 @@ export default function header(props) {
                     Home
                 </Link>
                 {" | "}
-                <Link style = {{color: "#fff"}} to = "/login">
+                <Link style = {{color: "#fff"}} to = "/Login">
                     Login
                 </Link>
                 {" | "}
@@ -27,6 +27,10 @@ export default function header(props) {
                 {" | "}
                 <Link style = {{color: "#fff"}} to = "/TrnsferMoney">
                     Trnasfer Money
+                </Link>
+                {" | "}
+                <Link style = {{color: "#fff"}} to = "/Logout">
+                    Logout
                 </Link>
             </div>
 

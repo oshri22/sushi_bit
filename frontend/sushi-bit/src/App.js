@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import axios from "axios"
 //import { v4 as uuidv4 } from "uuid";
 //import {Provider} from "react-redux"
 //import { applyMiddleware, createStore } from 'redux';
@@ -11,6 +12,7 @@ import Loginstatus from "./component/Loginstatus";
 import Register from "./component/Register";
 import BuyMoney from "./component/BuyMoney";
 import TrnsferMoney from "./component/TransferMoney";
+import Logout from "./component/Logout"
 
 export default function App() {
   const [userData, setUserdata] = useState({
@@ -25,8 +27,8 @@ export default function App() {
   useEffect(() => {
     const loggedInUser = localStorage.getItem("sushi-bit-user");
     if (loggedInUser) {
-      console.log(loggedInUser);
       const foundUser = JSON.parse(loggedInUser);
+      axios.post("/api/login",foundUser).then();
       setUserdata(foundUser);
       setLoginStatus("You are logged in");
     }
@@ -39,7 +41,7 @@ export default function App() {
           <Header userData={userData} />
           <Route
             exact
-            path="/login"
+            path="/Login"
             render={(props) => (
               <React.Fragment>
                 <Login
@@ -82,6 +84,20 @@ export default function App() {
             render={(props) => (
               <React.Fragment>
                 <TrnsferMoney userData={userData} setUserdata={setUserdata} />
+              </React.Fragment>
+            )}
+          />
+          <Route
+            exact
+            path="/Logout"
+            render={(props) => (
+              <React.Fragment>
+                <Logout
+                  setUserdata = {setUserdata}
+                  userData = {userData}
+                  setLoginStatus = {setLoginStatus}
+                />
+                <Loginstatus status={loginStatus} />
               </React.Fragment>
             )}
           />

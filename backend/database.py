@@ -174,7 +174,7 @@ class Database():
         :return: the messages
         """
         self.sql_lock.acquire()
-        query: str = "SELECT * FROM messages LIMIT ?" 
+        query: str = "SELECT * FROM messages order by id desc LIMIT ?" 
         messages = []
         for item in self.cursor.execute(query,(number, )):
             messages.append(item)
@@ -188,7 +188,7 @@ def main():
     data = Database("data.db")
     
 
-    print(data.get_messages(1))
+    print(data.get_messages(3))
 
 if __name__ == "__main__":
     main()

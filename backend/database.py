@@ -149,14 +149,48 @@ class Database():
         self.sql_lock.release()
         return {"transferd": True}
 
+    def save_massage(self, text: str, sender_username: str):
+        """
+        the function saves a message to the database
+        :param test: the text of the message
+        :param sender_username: the name of the sender
+        :return: the output of the operation
+        """
+        self.sql_lock.acquire()
+        query: str = "INSERT INTO messages VALUES(?, ?, NULL)"
+        if len(text) > 0:
+            self.cursor.execute(query,(text, sender_username))
+            self.connection.commit()
+            self.sql_lock.release()
+            return {"saved": True, "type": "uploaded successfully"}
+        else:
+            self.sql_lock.release()
+            return {"saved": False, "type": "could not upload an empty message!!"}
 
+    def get_messages(self, number: int):
+        """
+        the function gets messages from the database
+        :param number: the number of messages to get
+        :return: the messages
+        """
+        self.sql_lock.acquire()
+        query: str = "SELECT * FROM messages order by id desc LIMIT ?" 
+        messages = []
+        for item in self.cursor.execute(query,(number, )):
+            text, user, id = item
+            
+            messages.append({"user": user, "text": text, "id": id})
+        
+        self.sql_lock.release()
+        return messages
+        
 
 def main():
     print("started")
     data = Database("data.db")
     
 
-    print(data.transfer_money("galol", "gal", 10)["transferd"])
+    print(data.get_messages(3))
 
 if __name__ == "__main__":
     main()

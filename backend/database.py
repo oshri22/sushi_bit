@@ -177,7 +177,9 @@ class Database():
         query: str = "SELECT * FROM messages order by id desc LIMIT ?" 
         messages = []
         for item in self.cursor.execute(query,(number, )):
-            messages.append(item)
+            text, user, id = item
+            
+            messages.append({"user": user, "text": text, "id": id})
         
         self.sql_lock.release()
         return messages

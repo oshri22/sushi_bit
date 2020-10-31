@@ -32,6 +32,10 @@ export default function header(props) {
                 <Link style = {{color: "#fff"}} to = "/Logout">
                     Logout
                 </Link>
+                {" | "}
+                <Link style = {{color: "#fff"}} to = "/Form">
+                    Forms
+                </Link>
             </div>
 
 

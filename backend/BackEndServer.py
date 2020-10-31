@@ -125,6 +125,15 @@ def logout():
     return {"status":True}
 
 
+@app.route('/api/GetForm', methods=["GET"])
+def get_message():
+    return {"data":dbmanger.get_messages(15)}
+
+@app.route('/api/addForm/<path:data>', methods=["GET"])
+def add_message(data):
+    return dbmanger.save_massage(str(escape(data)),session["username"])
+
+
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=False)

@@ -6,10 +6,9 @@ export default function Logout(props) {
     e.preventDefault();
     if (localStorage.getItem("sushi-bit-user")) {
       const res = await axios.get("/api/Logout");
-      console.log(res.data);
 
       if (res.data.status) {
-        console.log("1");
+
         props.setUserdata({
           username: "",
           password: "",

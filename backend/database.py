@@ -17,6 +17,8 @@ class Database():
         self.cursor: sqlite3.Cursor = self.connection.cursor()
         self.sql_lock = Lock()
 
+        self.cursor.execute("CREATE TABLE IF NOT EXISTS messages(text, sender_username,id)")
+
     def user_login(self, user_name: str, user_password: str):
         """
         The function gets a user from the database and tries to connect to it 

@@ -190,7 +190,7 @@ class Database():
 def main():
     print("started")
     data = Database("data.db")
-    
+    data.save_massage("text", "gal")
 
     print(data.get_messages(3))
 

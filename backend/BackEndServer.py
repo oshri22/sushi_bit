@@ -23,7 +23,7 @@ def login():
     '''
     A route function for the login page that get the login info on a http post method
     then use the login function from the sql module to try login the user to his account
-    if login complete sucssesfuly store his data on a coockie and send the acount info 
+    if login complete sucssesfuly store his data on a coockie and send the acount info
     for the react.js on the client side
     if login failed then send an error response for the react.js on the client side
 
@@ -52,8 +52,8 @@ def login():
 def register():
     '''
     A route function for the register page that get the login info on a http post method
-    then use the login function from the sql module to try register a new user 
-    if registration complete sucssesfuly store his data on a coockie and send the acount info 
+    then use the login function from the sql module to try register a new user
+    if registration complete sucssesfuly store his data on a coockie and send the acount info
     for the react.js on the client side
     if login failed then send an error response for the react.js on the client side
 
@@ -77,11 +77,6 @@ def register():
         return json.dumps(res)
 
 
-@app.route('/form/form')
-def form():
-    pass
-
-
 @app.route('/api/menu')
 def menu():
     pass
@@ -91,7 +86,7 @@ def menu():
 def BuyMoney():
     """  A rout function for the but money page
       get amount and the user_to as a json
-      the pass them to the sql function to handel it next 
+      the pass them to the sql function to handel it next
 
       user_to: the user to get parameter -string
       amount: the amount to transfer - int
@@ -105,7 +100,7 @@ def transfer_money(userTo, amount):
     '''
      A rout function for the transfer money page
      get the user to and amount form the get parameters so the user will be abel to preform xss on the site to force a transform
-     the pass them to the sql function to handel it next 
+     the pass them to the sql function to handel it next
 
      user_to: the user to get parameter -string
      amount: the amount to transfer - int
@@ -113,10 +108,14 @@ def transfer_money(userTo, amount):
 
      return a dict that describe the transfer status
     '''
-    user_to = str(escape(userTo))
+    userTo = str(escape(userTo))
     amount = int(escape(amount))
-    user_from = session["username"]
-    return dbmanger.transfer_money(user_from, userTo, amount)
+    try:
+        user_from = session["username"]
+    except KeyError:
+        return {"status":"failed","type":"need to be logged in"}
+    else:
+        return dbmanger.transfer_money(user_from, userTo, amount)
 
 @app.route('/api/Logout', methods=["GET"])
 def logout():
@@ -131,7 +130,11 @@ def get_message():
 
 @app.route('/api/addForm/<path:data>', methods=["GET"])
 def add_message(data):
-    return dbmanger.save_massage(str(escape(data)),session["username"])
+    print(data)
+    try:
+        return dbmanger.save_massage(data,session["username"])
+    except KeyError:
+        return {"status":"failed","type":"need to be logged in"}
 
 
 if __name__ == "__main__":

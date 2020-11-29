@@ -17,9 +17,8 @@ export default function Comunity(props) {
     if (localStorage.getItem("sushi-bit-user")) {
       if (!pastMesseges[0].user) {
         const res = await Axios.get("/api/GetForm");
-        setPastMesseges(res.data.data);
+        setPastMesseges(res.data.data.reverse());
         seterror("");
-        console.log(pastMesseges);
       } else {
         setPastMesseges(pastMesseges);
       }
@@ -45,7 +44,7 @@ export default function Comunity(props) {
       const data = res.data;
       if (data.saved) {
         const res = await Axios.get(`/api/GetForm`);
-        setPastMesseges(res.data.data);
+        setPastMesseges(res.data.data.reverse());
         seterror(data.type);
         setMessege("");
       } else {

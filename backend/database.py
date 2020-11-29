@@ -181,7 +181,7 @@ class Database():
         for item in self.cursor.execute(query,(number, )):
             text, user, id = item
             
-            messages.append({"user": user, "text": text, "id": id})
+            messages.append({"user": user, "text": f"message- {text}", "id": id})
         
         self.sql_lock.release()
         return messages
@@ -192,7 +192,7 @@ def main():
     data = Database("data.db")
     data.save_massage("text", "gal")
 
-    print(data.get_messages(3))
+    print(data.get_messages(15))
 
 if __name__ == "__main__":
     main()

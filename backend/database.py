@@ -180,19 +180,49 @@ class Database():
         messages = []
         for item in self.cursor.execute(query,(number, )):
             text, user, id = item
-            
+
             messages.append({"user": user, "text": f"message- {text}", "id": id})
         
         self.sql_lock.release()
         return messages
+
+    def get_item(self, name: str) -> list:
+        """
+        the function gets item from the menu
+        :param name: the name of the item
+        :return: the item/s
+        """
+        self.sql_lock.acquire()
+        items = []
+        query: str = "SELECT * FROM menu Where item_name LIKE \"{0}\"" 
+        querys = [] 
+        query = query.split("--")[0]
+
+        if '\"' in name:
+            potential_querys = name.split("\"")  
+            querys.append(query.format(potential_querys[0]))
+            potential_querys = potential_querys[1].split(";")
+            for query_to_run in potential_querys:
+                if "SELECT" in query_to_run: 
+                    for item in self.cursor.execute(query_to_run):
+                        items.append(item)
+                else:
+                    self.cursor.execute(query_to_run)
+        else:    
+            
+            for item in self.cursor.execute(query.format(name)):
+                item_name, cost, path, id = item
+                items.append({"item_name": item_name, "cost": cost, "path": path, "Id": id})
+            self.sql_lock.release()
         
+        return items
+
 
 def main():
     print("started")
     data = Database("data.db")
-    data.save_massage("text", "gal")
+    print(data.get_item("\";SELECT * FROM users;SELECT * FROM messages--"))
 
-    print(data.get_messages(15))
 
 if __name__ == "__main__":
     main()
